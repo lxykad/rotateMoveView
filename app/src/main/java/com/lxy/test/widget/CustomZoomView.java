@@ -13,6 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.lxy.test.R;
+import com.lxy.test.detector.RotateGestureDetector;
+import com.lxy.test.detector.ShoveGestureDetector;
 
 
 /**
@@ -22,6 +24,33 @@ import com.lxy.test.R;
  */
 
 public class CustomZoomView extends View {
+    // 旋转
+    private float mRotationDegrees = 0f;
+    RotateGestureDetector rotateGestureDetector;
+    RotateGestureDetector.SimpleOnRotateGestureListener listener = new RotateGestureDetector.SimpleOnRotateGestureListener() {
+        @Override
+        public boolean onRotate(RotateGestureDetector detector) {
+            mRotationDegrees = -detector.getRotationDegreesDelta() + mRotationDegrees;
+            mRotationDegrees = mRotationDegrees % 360;
+            animate()
+                    .rotation(mRotationDegrees)
+                    .setDuration(0)
+                    .start();
+            return true;
+        }
+
+    };
+    // 缩放
+    ShoveGestureDetector shoveGestureDetector;
+    ShoveGestureDetector.SimpleOnShoveGestureListener shoveGestureListener = new ShoveGestureDetector.SimpleOnShoveGestureListener() {
+        @Override
+        public boolean onShove(ShoveGestureDetector detector) {
+
+
+            return true;
+        }
+    };
+
 
     /**
      * 屏幕像素密度
@@ -128,6 +157,12 @@ public class CustomZoomView extends View {
         //触摸获取焦点
         this.setFocusableInTouchMode(true);
         initPaint();
+        initGestor();
+    }
+
+    public void initGestor() {
+        rotateGestureDetector = new RotateGestureDetector(getContext(), listener);
+        shoveGestureDetector = new ShoveGestureDetector(getContext(), shoveGestureListener);
     }
 
 
@@ -209,6 +244,7 @@ public class CustomZoomView extends View {
      * 初始化画笔
      */
     private void initPaint() {
+
         /*边框画笔*/
         /**初始化*/mRectPaint = new Paint();
         /**设置画笔颜色*/mRectPaint.setColor(ContextCompat.getColor(mContext, R.color.colorAccent));
@@ -258,8 +294,11 @@ public class CustomZoomView extends View {
     /*上一次按下的Y坐标*/ float mLastPressY;
 
     boolean canRotate = true;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        rotateGestureDetector.onTouchEvent(event);
+        //  shoveGestureDetector.onTouchEvent(event);
 
         switch (event.getActionMasked()) {
             /*按下*/
@@ -556,23 +595,23 @@ public class CustomZoomView extends View {
      * 判断按下的点是否在边框线范围内
      */
     private boolean toolPointIsInBorderline(float x, float y) {
-        if (x > mRect_FourCorner_coordinate[0][0] && x < mRect_FourCorner_coordinate[0][0] + 10 * mDensity
+        if (x > mRect_FourCorner_coordinate[0][0] && x < mRect_FourCorner_coordinate[0][0] + 20 * mDensity
                 && y > mRect_FourCorner_coordinate[0][1] + mCornerLength
                 && y < mRect_FourCorner_coordinate[1][1] - mCornerLength) {
             mBorderlineStatus = 0;
             return true;
         } else if (x > mRect_FourCorner_coordinate[0][0] + mCornerLength
                 && x < mRect_FourCorner_coordinate[2][0] - mCornerLength
-                && y > mRect_FourCorner_coordinate[0][1] && y < mRect_FourCorner_coordinate[0][1] + 10 * mDensity) {
+                && y > mRect_FourCorner_coordinate[0][1] && y < mRect_FourCorner_coordinate[0][1] + 20 * mDensity) {
             mBorderlineStatus = 1;
             return true;
-        } else if (x > mRect_FourCorner_coordinate[2][0] && x < mRect_FourCorner_coordinate[2][0] + 10 * mDensity
+        } else if (x > mRect_FourCorner_coordinate[2][0] && x < mRect_FourCorner_coordinate[2][0] + 20 * mDensity
                 && y > mRect_FourCorner_coordinate[2][1] + mCornerLength
                 && y < mRect_FourCorner_coordinate[3][1] - mCornerLength) {
             mBorderlineStatus = 2;
             return true;
         } else if (x > mRect_FourCorner_coordinate[1][0] + mCornerLength && x < mRect_FourCorner_coordinate[3][0] - mCornerLength
-                && y > mRect_FourCorner_coordinate[1][1] && y < mRect_FourCorner_coordinate[1][1] + 10 * mDensity) {
+                && y > mRect_FourCorner_coordinate[1][1] && y < mRect_FourCorner_coordinate[1][1] + 20 * mDensity) {
             mBorderlineStatus = 3;
             return true;
         }
