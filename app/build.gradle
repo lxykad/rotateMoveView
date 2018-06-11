@@ -26,4 +26,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.Almeros:android-gesture-detectors:v1.0'
+    implementation 'com.blankj:utilcode:1.16.4'
 }

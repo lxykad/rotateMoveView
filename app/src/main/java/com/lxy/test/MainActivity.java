@@ -1,11 +1,20 @@
 package com.lxy.test;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.almeros.android.multitouch.MoveGestureDetector;
 import com.almeros.android.multitouch.RotateGestureDetector;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.Utils;
 import com.lxy.test.widget.CustomZoomView;
 import com.lxy.test.widget.RotateView;
 
@@ -85,13 +94,60 @@ public class MainActivity extends AppCompatActivity {
         rotateGestureDetector = new RotateGestureDetector(this, simpleOnRotateGestureListener);
 
         moveGestureDetector = new MoveGestureDetector(this, moveGestureListener);
+        int screenHeight = ScreenUtils.getScreenHeight() * 2;
+        int screenWidth = ScreenUtils.getScreenWidth();
+
+        int rest = screenHeight - screenWidth;
+
+        LinearLayout layout = findViewById(R.id.view_layout);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.width = screenHeight;
+        layoutParams.height = screenHeight;
+
+
+        LinearLayout.LayoutParams zoomParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        zoomParams.width = screenHeight;
+        layoutParams.height = screenHeight;
+
+        layoutParams.leftMargin = -rest / 4;
+        zoomParams.leftMargin = -rest / 4;
+
+        layout.setLayoutParams(layoutParams);
+        zoomView.setLayoutParams(zoomParams);
+
+        zoomView.animate()
+                .rotation(0)
+                .scaleY(1f)
+                .scaleX(1f)
+                .setDuration(0)
+                .start();
+
+        zoomView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                System.out.println("top====l==="+zoomView.getLeft());
+                System.out.println("top====r==="+zoomView.getRight());
+                System.out.println("top====w==="+zoomView.getWidth());
+                System.out.println("top====h==="+zoomView.getHeight());
+                System.out.println("top====sw==="+ScreenUtils.getScreenWidth());
+
+
+
+                zoomView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
 
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-       // rotateGestureDetector.onTouchEvent(event);
-      //  moveGestureDetector.onTouchEvent(event);
+        // rotateGestureDetector.onTouchEvent(event);
+        //  moveGestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    public void btClick(View view) {
+        Toast.makeText(view.getContext(), "bt", Toast.LENGTH_SHORT).show();
     }
 }

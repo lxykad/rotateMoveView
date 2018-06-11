@@ -2,7 +2,9 @@ package com.lxy.test.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -11,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lxy.test.R;
 import com.lxy.test.detector.RotateGestureDetector;
@@ -34,8 +37,11 @@ public class CustomZoomView extends View {
             mRotationDegrees = mRotationDegrees % 360;
             animate()
                     .rotation(mRotationDegrees)
+
                     .setDuration(0)
                     .start();
+            System.out.println("degree====" + mRotationDegrees);
+            // invalidate();
             return true;
         }
 
@@ -54,6 +60,7 @@ public class CustomZoomView extends View {
 
     /**
      * 屏幕像素密度
+     * 3.0
      */
     private float mDensity = getContext().getResources().getDisplayMetrics().density;
 
@@ -182,14 +189,25 @@ public class CustomZoomView extends View {
         mViewWidth = getWidth();
         mViewHeight = getHeight();
 
-        /*初始化矩形四边角坐标*/
+
+        /**
+         * 初始化矩形四边角坐标
+         * */
         mRect_FourCorner_coordinate = new float[][]{
                 {(mViewWidth - mRectLength) / 2, (mViewHeight - mRectLength) / 2},//左上角
                 {(mViewWidth - mRectLength) / 2, (mViewHeight + mRectLength) / 2},//左下角
                 {(mViewWidth + mRectLength) / 2, (mViewHeight - mRectLength) / 2},//右上角
                 {(mViewWidth + mRectLength) / 2, (mViewHeight + mRectLength) / 2},//右下角
         };
+
     }
+
+    Rect rect;
+
+    public Rect getRect() {
+        return rect;
+    }
+
 
     /**
      * 绘制框相关元素
@@ -199,10 +217,25 @@ public class CustomZoomView extends View {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.parseColor("#30ff0000"));
+        rect = new Rect();
+        float left = mRect_FourCorner_coordinate[0][0];
+        float top = mRect_FourCorner_coordinate[0][1];
+        float right = mRect_FourCorner_coordinate[3][0];
+        float bottom = mRect_FourCorner_coordinate[3][1];
+        rect.left = (int) left;
+        rect.top = (int) top;
+        rect.right = (int) right;
+        rect.bottom = (int) bottom;
+
+
+        //   canvas.rotate(mRotationDegrees, rect.left + mRectLength / 2f, rect.top + mRectLength / 2f);
+        // canvas.drawColor(Color.parseColor("#30ff0000"));
 
         /*绘制边框*/
-        canvas.drawRect(mRect_FourCorner_coordinate[0][0], mRect_FourCorner_coordinate[0][1]
-                , mRect_FourCorner_coordinate[3][0], mRect_FourCorner_coordinate[3][1], mRectPaint);
+//        canvas.drawRect(mRect_FourCorner_coordinate[0][0], mRect_FourCorner_coordinate[0][1]
+//                , mRect_FourCorner_coordinate[3][0], mRect_FourCorner_coordinate[3][1], mRectPaint);
+        canvas.drawRect(rect, mRectPaint);
 
         /*绘制边角*/
         /*左上-横*/
@@ -248,7 +281,7 @@ public class CustomZoomView extends View {
         /*边框画笔*/
         /**初始化*/mRectPaint = new Paint();
         /**设置画笔颜色*/mRectPaint.setColor(ContextCompat.getColor(mContext, R.color.colorAccent));
-        /**设置画笔样式*/mRectPaint.setStyle(Paint.Style.STROKE);
+        /**设置画笔样式*/mRectPaint.setStyle(Paint.Style.FILL);
         /**设置画笔粗细*/mRectPaint.setStrokeWidth(2 * mDensity);
         /**使用抗锯齿*/mRectPaint.setAntiAlias(true);
         /**使用防抖动*/mRectPaint.setDither(true);
@@ -298,7 +331,6 @@ public class CustomZoomView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         rotateGestureDetector.onTouchEvent(event);
-        //  shoveGestureDetector.onTouchEvent(event);
 
         switch (event.getActionMasked()) {
             /*按下*/
@@ -308,7 +340,7 @@ public class CustomZoomView extends View {
                 /**当前按下的Y坐标*/float mPressY = event.getY();
 
                 /*判断按下的点是都在边界线上*/
-                if (toolPointIsInBorderline(mPressX, mPressY)) {
+                if (toolPointIsInBorderline2(mPressX, mPressY)) {
                     mOperatingStatus = 3;
                 }
                 /*判断按下的点是否在边角上*/
@@ -453,8 +485,15 @@ public class CustomZoomView extends View {
             default:
                 break;
         }
-        System.out.println("rotate====" + canRotate);
-        return true;
+        boolean canMove = false;
+        if (mOperatingStatus == 2 || mOperatingStatus == 3) {
+            canMove = true;
+        } else {
+            canMove = false;
+        }
+        System.out.println("status======" + mOperatingStatus);
+
+        return canMove;
     }
 
     /**
@@ -468,6 +507,10 @@ public class CustomZoomView extends View {
             return true;
         }
         return false;
+    }
+
+    public void showToast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -618,6 +661,35 @@ public class CustomZoomView extends View {
 
         return false;
     }
+
+    /**
+     * 判断按下的点是否在边框线范围内
+     */
+    private boolean toolPointIsInBorderline2(float x, float y) {
+        if (x > mRect_FourCorner_coordinate[0][0] && x < mRect_FourCorner_coordinate[0][0] + 20 * mDensity
+                && y > mRect_FourCorner_coordinate[0][1] + mCornerLength
+                && y < mRect_FourCorner_coordinate[1][1] - mCornerLength) {
+            mBorderlineStatus = 0;
+            return true;
+        } else if (x > mRect_FourCorner_coordinate[0][0] + mCornerLength
+                && x < mRect_FourCorner_coordinate[2][0] - mCornerLength
+                && y > mRect_FourCorner_coordinate[0][1] && y < mRect_FourCorner_coordinate[0][1] + 20 * mDensity) {
+            mBorderlineStatus = 1;
+            return true;
+        } else if (x > mRect_FourCorner_coordinate[2][0] && x < mRect_FourCorner_coordinate[2][0] + 20 * mDensity
+                && y > mRect_FourCorner_coordinate[2][1] + mCornerLength
+                && y < mRect_FourCorner_coordinate[3][1] - mCornerLength) {
+            mBorderlineStatus = 2;
+            return true;
+        } else if (x > mRect_FourCorner_coordinate[1][0] + mCornerLength && x < mRect_FourCorner_coordinate[3][0] - mCornerLength
+                && y > mRect_FourCorner_coordinate[1][1] && y < mRect_FourCorner_coordinate[1][1] + 20 * mDensity) {
+            mBorderlineStatus = 3;
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * 判断是否还能缩放-边角线触碰就不再缩放
