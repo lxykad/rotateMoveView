@@ -38,7 +38,8 @@
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false">
+        android:clickable="false"
+        android:visibility="visible">
 
         <com.lxy.test.widget.CustomZoomView
             android:id="@+id/zoom_view"

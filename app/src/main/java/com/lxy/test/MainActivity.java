@@ -1,6 +1,6 @@
 package com.lxy.test;
 
-import android.graphics.Rect;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.almeros.android.multitouch.MoveGestureDetector;
 import com.almeros.android.multitouch.RotateGestureDetector;
 import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.Utils;
+import com.lxy.test.ui.BActivity;
 import com.lxy.test.widget.CustomZoomView;
 import com.lxy.test.widget.RotateView;
 
@@ -94,23 +94,27 @@ public class MainActivity extends AppCompatActivity {
         rotateGestureDetector = new RotateGestureDetector(this, simpleOnRotateGestureListener);
 
         moveGestureDetector = new MoveGestureDetector(this, moveGestureListener);
-        int screenHeight = ScreenUtils.getScreenHeight() * 2;
+        int screenHeight = ScreenUtils.getScreenHeight() * 1;
         int screenWidth = ScreenUtils.getScreenWidth();
 
         int rest = screenHeight - screenWidth;
+        int restHeight = ScreenUtils.getScreenHeight() * 0;
 
         LinearLayout layout = findViewById(R.id.view_layout);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.width = screenHeight;
+        layoutParams.width = screenWidth;
         layoutParams.height = screenHeight;
 
 
         LinearLayout.LayoutParams zoomParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        zoomParams.width = screenHeight;
+        zoomParams.width = screenWidth;
         layoutParams.height = screenHeight;
 
-        layoutParams.leftMargin = -rest / 4;
-        zoomParams.leftMargin = -rest / 4;
+      //  layoutParams.leftMargin = -rest / 4;
+      //  zoomParams.leftMargin = -rest / 4;
+
+        layoutParams.topMargin = 0;
+        zoomParams.topMargin = 0;
 
         layout.setLayoutParams(layoutParams);
         zoomView.setLayoutParams(zoomParams);
@@ -122,14 +126,21 @@ public class MainActivity extends AppCompatActivity {
                 .setDuration(0)
                 .start();
 
+
+
         zoomView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                System.out.println("top====l==="+zoomView.getLeft());
-                System.out.println("top====r==="+zoomView.getRight());
-                System.out.println("top====w==="+zoomView.getWidth());
-                System.out.println("top====h==="+zoomView.getHeight());
-                System.out.println("top====sw==="+ScreenUtils.getScreenWidth());
+                final int[] location = new int[2] ;
+                zoomView.getLocationOnScreen(location);
+                System.out.println("top====x===" + location[0]);
+                System.out.println("top====y===" + location[1]);
+
+                System.out.println("top====left===" + zoomView.getLeft());
+                System.out.println("top====width===" + zoomView.getWidth());
+                System.out.println("top====height===" + ScreenUtils.getScreenHeight());
+
+
 
 
 
@@ -148,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btClick(View view) {
-        Toast.makeText(view.getContext(), "bt", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(view.getContext(), "bt", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(view.getContext(), BActivity.class);
+        startActivity(intent);
     }
 }

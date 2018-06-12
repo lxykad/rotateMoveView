@@ -676,13 +676,13 @@ public class CustomZoomView extends View {
                 && y > mRect_FourCorner_coordinate[0][1] && y < mRect_FourCorner_coordinate[0][1] + 20 * mDensity) {
             mBorderlineStatus = 1;
             return true;
-        } else if (x > mRect_FourCorner_coordinate[2][0] && x < mRect_FourCorner_coordinate[2][0] + 20 * mDensity
+        } else if (x < mRect_FourCorner_coordinate[2][0] && x > mRect_FourCorner_coordinate[2][0] - 20 * mDensity
                 && y > mRect_FourCorner_coordinate[2][1] + mCornerLength
                 && y < mRect_FourCorner_coordinate[3][1] - mCornerLength) {
             mBorderlineStatus = 2;
             return true;
         } else if (x > mRect_FourCorner_coordinate[1][0] + mCornerLength && x < mRect_FourCorner_coordinate[3][0] - mCornerLength
-                && y > mRect_FourCorner_coordinate[1][1] && y < mRect_FourCorner_coordinate[1][1] + 20 * mDensity) {
+                && y < mRect_FourCorner_coordinate[1][1] && y > mRect_FourCorner_coordinate[1][1] - 20 * mDensity) {
             mBorderlineStatus = 3;
             return true;
         }
