@@ -15,6 +15,7 @@ import com.almeros.android.multitouch.MoveGestureDetector;
 import com.almeros.android.multitouch.RotateGestureDetector;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.lxy.test.ui.BActivity;
+import com.lxy.test.ui.Kt2Activity;
 import com.lxy.test.ui.KtActivity;
 import com.lxy.test.widget.CustomZoomView;
 import com.lxy.test.widget.RotateView;

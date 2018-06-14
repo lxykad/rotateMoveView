@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.BActivity" />
-        <activity android:name=".ui.KtActivity"></activity>
+        <activity android:name=".ui.KtActivity" />
+        <activity android:name=".ui.Kt2Activity"></activity>
     </application>
 
 </manifest>
