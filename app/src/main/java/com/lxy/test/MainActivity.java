@@ -15,6 +15,7 @@ import com.almeros.android.multitouch.MoveGestureDetector;
 import com.almeros.android.multitouch.RotateGestureDetector;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.lxy.test.ui.BActivity;
+import com.lxy.test.ui.KtActivity;
 import com.lxy.test.widget.CustomZoomView;
 import com.lxy.test.widget.RotateView;
 
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         zoomParams.width = screenWidth;
         layoutParams.height = screenHeight;
 
-      //  layoutParams.leftMargin = -rest / 4;
-      //  zoomParams.leftMargin = -rest / 4;
+        //  layoutParams.leftMargin = -rest / 4;
+        //  zoomParams.leftMargin = -rest / 4;
 
         layoutParams.topMargin = 0;
         zoomParams.topMargin = 0;
@@ -127,11 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 .start();
 
 
-
         zoomView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                final int[] location = new int[2] ;
+                final int[] location = new int[2];
                 zoomView.getLocationOnScreen(location);
                 System.out.println("top====x===" + location[0]);
                 System.out.println("top====y===" + location[1]);
@@ -139,9 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("top====left===" + zoomView.getLeft());
                 System.out.println("top====width===" + zoomView.getWidth());
                 System.out.println("top====height===" + ScreenUtils.getScreenHeight());
-
-
-
 
 
                 zoomView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -159,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btClick(View view) {
-       // Toast.makeText(view.getContext(), "bt", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(view.getContext(), BActivity.class);
+        Intent intent = new Intent(view.getContext(), KtActivity.class);
         startActivity(intent);
     }
 }
