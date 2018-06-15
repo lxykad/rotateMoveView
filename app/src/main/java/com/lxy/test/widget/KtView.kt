@@ -11,7 +11,6 @@ class KtView : View {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributes: AttributeSet?) : this(context, null, 0)
     constructor(context: Context, attributes: AttributeSet?, int: Int) : super(context, attributes, int) {
-        println("att======init=")
         init(attributes)
     }
 
@@ -19,9 +18,8 @@ class KtView : View {
 
         if (attributes != null) {
             println("att=======" + attributes)
-        } else {
-            println("att======null=")
         }
+
 
     }
 

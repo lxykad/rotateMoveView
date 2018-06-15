@@ -7,11 +7,11 @@ class Student(name: String) {
     constructor(name: String, age: Int) : this(name)
 
     init {
-      //  println("=============student====$name")
+        //  println("=============student====$name")
     }
 
     fun show() {
-      //  println("11111=======$address")
+        //  println("11111=======$address")
     }
 
 }
