@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lxy.test">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".app.BaseApplication"
         android:allowBackup="true"
@@ -19,7 +21,8 @@
         </activity>
         <activity android:name=".ui.BActivity" />
         <activity android:name=".ui.KtActivity" />
-        <activity android:name=".ui.Kt2Activity"></activity>
+        <activity android:name=".ui.Kt2Activity" />
+        <activity android:name=".ui.FlexActivity"></activity>
     </application>
 
 </manifest>
