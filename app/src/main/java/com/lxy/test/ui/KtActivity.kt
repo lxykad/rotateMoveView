@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.lxy.test.R
 import com.lxy.test.entity.Person
 import com.lxy.test.entity.Student
+import com.lxy.test.extension.toast
 import kotlinx.android.synthetic.main.activity_kt.*
 
 class KtActivity : AppCompatActivity() {
@@ -14,7 +15,7 @@ class KtActivity : AppCompatActivity() {
         setContentView(R.layout.activity_kt)
 
         var stu: Student = Student("lxy", 22)
-        stu.show()
+
 
         tv_top.text = "kt1"
 
@@ -24,13 +25,20 @@ class KtActivity : AppCompatActivity() {
 
         tv_top.setOnClickListener {
 
-            name = name ?: "haha"
+            name = name ?: "madan"
 
             // Toast.makeText(it.context,"bt",Toast.LENGTH_SHORT).show()
             //  println("length=======" + name!!.length) // 崩溃
             println("length=======" + name?.length) // null
+            name?.let {
+                toast(it)
+            }
         }
 
+        /**
+         * 扩展toast
+         */
+        mTvExtension.setOnClickListener { toast("ext") }
 
         stu.let {
             println("stu======")
@@ -89,8 +97,6 @@ class KtActivity : AppCompatActivity() {
         println("person=======${lxh.hashCode()}")
         println("person=======${kad.hashCode()}")
         println("person=======$b")
-
-
 
 
     }

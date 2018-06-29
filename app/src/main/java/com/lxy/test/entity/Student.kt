@@ -1,17 +1,13 @@
 package com.lxy.test.entity
 
-class Student(name: String) {
+class Student(var name: String, var age: Int = 22) {
 
     private var address: String = ""
 
-    constructor(name: String, age: Int) : this(name)
+    constructor(name: String) : this(name, 18)
 
     init {
-        //  println("=============student====$name")
-    }
 
-    fun show() {
-        //  println("11111=======$address")
     }
 
 }

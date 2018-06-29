@@ -2,11 +2,12 @@ package com.lxy.test.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.lxy.test.R;
 
 /**
- * @author lxy
+ *  @author lxy
  */
 public class BActivity extends AppCompatActivity {
 
@@ -14,5 +15,7 @@ public class BActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_b);
+
+
     }
 }
